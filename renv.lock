@@ -1,0 +1,24 @@
+{
+  "R": {
+    "Version": "4.0.3",
+    "Repositories": [
+      {
+        "Name": "CRAN",
+        "URL": "https://rspm.lander.ai/prod-cran/latest"
+      },
+      {
+        "Name": "GitHub-Packages",
+        "URL": "https://rspm.lander.ai:443/GitHub-Packages/latest"
+      }
+    ]
+  },
+  "Packages": {
+    "renv": {
+      "Package": "renv",
+      "Version": "0.12.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "b5510c50c7f31d453c385c7b460af2b9"
+    }
+  }
+}
