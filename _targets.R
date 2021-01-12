@@ -1,0 +1,98 @@
+library(targets)
+library(tarchetypes)
+
+source("R/functions.r")
+
+options(tidyverse.quiet = TRUE)
+tar_option_set(packages = c("magrittr"))
+
+token_lifespan <- as.difftime(60, units='mins')
+token_target_path <- tar_path(access_token)
+
+bucket_name <- Sys.getenv('BUCKET_NAME')
+folder_name <- Sys.getenv('FOLDER_NAME')
+
+list(
+    tar_force(
+        access_token,
+        get_token(api_key=Sys.getenv('ECOBEE_API_KEY'), refresh_token=Sys.getenv('ECOBEE_REFRESH_TOKEN')),
+        force=TRUE#Sys.time() - file.mtime(token_target_path) >= token_lifespan
+    )
+    , tar_target(
+        thermostat_info,
+        get_thermostat_info(access_token)
+    )
+    , tar_target(
+        thermostat_ids,
+        get_thermostat_ids(thermostat_info)
+    )
+    , tar_target(
+        start_date,
+        compute_start_date(thermostat_info)
+    )
+    , tar_target(
+        end_date,
+        compute_end_date(thermostat_info)
+    )
+    , tar_target(
+        start_interval,
+        compute_start_interval(thermostat_info)
+    )
+    , tar_target(
+        end_interval,
+        compute_end_interval(start_interval)
+    )
+    , tar_target(
+        report,
+        get_report(
+            startDate=start_date, endDate=end_date,
+            startInterval=start_interval, endInterval=end_interval,
+            thermostats=thermostat_ids, 
+            access_token=access_token
+        )
+    )
+    , tar_target(
+        thermostat_names,
+        get_thermostat_names(thermostat_info)
+    )
+    , tar_target(
+        central_thermostat_info, 
+        extract_thermostat_info(report)
+    )
+    , tar_target(
+        sensor_info,
+        extract_sensor_info(report)
+    )
+    , tar_target(
+        all_info,
+        combine_thermostat_sensors(central_thermostat_info, sensor_info, thermostat_names) 
+    )
+    , tar_target(
+        data_date,
+        get_local_date(thermostat_info)
+    )
+    , tar_target(
+        filename,
+        paste(data_date, 'csv', sep='.')
+    )
+    , tar_target(
+        filepath,
+        # tempfile(fileext='.csv')
+        here::here('data', filename)
+    )
+    , tar_target(
+        write_data,
+        write_file(all_info, file=filepath),
+        format='file'
+    )
+    , tar_target(
+        put_to_bucket,
+        aws.s3::put_object(
+            file=write_data, object=sprintf('%s/%s', folder_name, filename), bucket=bucket_name
+        )
+    )
+    , tar_target(
+        delete_file,
+        if(put_to_bucket) unlink(filepath)
+    )
+)

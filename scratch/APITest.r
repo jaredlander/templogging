@@ -9,7 +9,7 @@ token_request <- httr::POST(
 access_token <- httr::content(token_request)$access_token
 
 temp_all <- httr::GET(
-    'https://api.ecobee.com/1/thermostat?format=json&body={"selection":{"selectionType":"registered","selectionMatch":"","includeRuntime":true,"includeSettings":true,"includeSensors":true}}'
+    'https://api.ecobee.com/1/thermostat?format=json&body={"selection":{"selectionType":"registered","selectionMatch":"","includeRuntime":true,"includeSettings":true,"includeSensors":true,"includeWeather":true}}'
     , httr::add_headers(Authorization=glue::glue('Bearer {access_token}'))
     , encode='json'
 )
