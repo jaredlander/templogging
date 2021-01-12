@@ -14,4 +14,4 @@ jobs:
     Run-Temp-Logging:
         runs-on: ubuntu-latest
         steps:
-            - run: docker run --rm -e BUCKET_NAME={{ secrets.BUCKET_NAME }} -e FOLDER_NAME={{ secrets.FOLDER_NAME }} -e AWS_ACCESS_KEY_ID={{ secrets.AWS_ACCESS_KEY_ID }} -e AWS_SECRET_ACCESS_KEY={{ secrets.AWS_SECRET_ACCESS_KEY }} docker.io/jaredlander/templogging:latest
+            - run: docker run --rm -e BUCKET_NAME={{ secrets.BUCKET_NAME }} -e FOLDER_NAME={{ secrets.FOLDER_NAME }} -e AWS_ACCESS_KEY_ID={{ secrets.AWS_ACCESS_KEY_ID }}  docker.io/jaredlander/templogging:latest
