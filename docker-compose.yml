@@ -1,0 +1,17 @@
+version: '3.4'
+
+services:
+  templogging:
+    image: jaredlander/templogging
+    container_name: tempcheck
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      - BUCKET_NAME=${BUCKET_NAME}
+      - FOLDER_NAME=${FOLDER_NAME}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+      - AWS_S3_ENDPOINT=${AWS_S3_ENDPOINT}
+      - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}

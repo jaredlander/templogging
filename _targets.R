@@ -82,7 +82,7 @@ list(
     )
     , tar_target(
         write_data,
-        write_file(all_info, file=filepath),
+        write_file(all_info, file=filename),
         format='file'
     )
     , tar_target(
@@ -93,6 +93,6 @@ list(
     )
     , tar_target(
         delete_file,
-        if(put_to_bucket) unlink(filepath)
+        if(put_to_bucket) unlink(filename)
     )
 )
