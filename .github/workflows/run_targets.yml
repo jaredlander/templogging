@@ -30,4 +30,5 @@ jobs:
         steps:
             - name: Run targets workflow
               run: R -e "getwd()" -e "dir('/templogging')"
+              working-directory: /templogging
             #   run: R -e "targets::tar_make()"
