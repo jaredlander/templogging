@@ -18,6 +18,9 @@ token_target_path <- tar_path(access_token)
 bucket_name <- Sys.getenv('BUCKET_NAME')
 folder_name <- Sys.getenv('FOLDER_NAME')
 
+# if we want to hardcode a data, but there has to be a better way
+# start_now <- as.Date('2021-01-12')
+
 list(
     tar_force(
         access_token,
@@ -35,10 +38,14 @@ list(
     )
     , tar_target(
         start_date,
+        # if we want to hardcode a data, but there has to be a better way
+        # start_now
         compute_start_date(thermostat_info)
     )
     , tar_target(
         end_date,
+        # if we want to hardcode a data, but there has to be a better way
+        # start_now + 1
         compute_end_date(thermostat_info)
     )
     , tar_target(
@@ -76,6 +83,8 @@ list(
     )
     , tar_target(
         data_date,
+        # if we want to hardcode a data, but there has to be a better way
+        # start_now
         get_local_date(thermostat_info)
     )
     , tar_target(
