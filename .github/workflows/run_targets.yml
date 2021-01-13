@@ -9,6 +9,7 @@ on:
             - master
     schedule:
         - cron: '*/30 * * * *'
+        - cron: '57 23 * * *'
 
 name: Run-Targets
 
