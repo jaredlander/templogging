@@ -22,4 +22,4 @@ RUN Rscript -e "renv::restore(repos='https://packagemanager.rstudio.com/all/__li
 
 ADD . /templogging
 
-CMD ["Rscript", "./run_targets.r"]
+# CMD ["Rscript", "./run_targets.r"]
