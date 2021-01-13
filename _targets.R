@@ -1,11 +1,17 @@
+# packages needed for targets
 library(targets)
 library(tarchetypes)
 
+# this has helper functions
+source("R/utilities.r")
+# functions for the actual workflow
 source("R/functions.r")
 
 options(tidyverse.quiet = TRUE)
+# magrittr will be available for every step
 tar_option_set(packages = c("magrittr"))
 
+# If the token is older than this long refresh it
 token_lifespan <- as.difftime(60, units='mins')
 token_target_path <- tar_path(access_token)
 
@@ -16,7 +22,8 @@ list(
     tar_force(
         access_token,
         get_token(api_key=Sys.getenv('ECOBEE_API_KEY'), refresh_token=Sys.getenv('ECOBEE_REFRESH_TOKEN')),
-        force=TRUE#Sys.time() - file.mtime(token_target_path) >= token_lifespan
+        # if the token is too old or doesn't exist, run
+        if_not_na(Sys.time() - file.mtime(token_target_path), token_lifespan) >= token_lifespan
     )
     , tar_target(
         thermostat_info,
