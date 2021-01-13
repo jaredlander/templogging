@@ -29,4 +29,5 @@ jobs:
                 ECOBEE_REFRESH_TOKEN: ${{ secrets.ECOBEE_REFRESH_TOKEN }}
         steps:
             - name: Run targets workflow
-              run: R -e "targets::tar_make()"
+              run: R -e "getwd()" -e "dir()"
+            #   run: R -e "targets::tar_make()"
