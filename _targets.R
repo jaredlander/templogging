@@ -18,8 +18,15 @@ token_target_path <- tar_path(access_token)
 bucket_name <- Sys.getenv('BUCKET_NAME')
 folder_name <- Sys.getenv('FOLDER_NAME')
 
+if(!exists('process_date'))
+{
+    process_date <- NULL
+}
+cat(process_date)
+
+
 # if we want to hardcode a data, but there has to be a better way
-# start_now <- as.Date('2021-01-12')
+# start_now <- as.Date('2021-01-03')
 
 list(
     tar_force(
@@ -40,13 +47,13 @@ list(
         start_date,
         # if we want to hardcode a data, but there has to be a better way
         # start_now
-        compute_start_date(thermostat_info)
+        compute_start_date(thermostat_info, override=process_date)
     )
     , tar_target(
         end_date,
         # if we want to hardcode a data, but there has to be a better way
         # start_now + 1
-        compute_end_date(thermostat_info)
+        compute_end_date(thermostat_info, override=process_date)
     )
     , tar_target(
         start_interval,
@@ -85,7 +92,7 @@ list(
         data_date,
         # if we want to hardcode a data, but there has to be a better way
         # start_now
-        get_local_date(thermostat_info)
+        get_local_date(thermostat_info, override=process_date)
     )
     , tar_target(
         filename,
@@ -109,6 +116,6 @@ list(
     )
     , tar_target(
         delete_file,
-        if(put_to_bucket) unlink(filename)
+        if(file.exists(filename)) unlink(filename)
     )
 )

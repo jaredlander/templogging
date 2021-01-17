@@ -259,7 +259,8 @@ get_utc_date <- function(thermostat_info)
 
 #' Title
 #'
-#' @param thermostat_info 
+#' @param thermostat_info
+#' @param override
 #'
 #' @return
 #' @export
@@ -267,8 +268,12 @@ get_utc_date <- function(thermostat_info)
 #' @examples
 #' the_info <- get_thermostat_info(access_token)
 #' get_local_date(the_info)
-get_local_date <- function(thermostat_info)
+get_local_date <- function(thermostat_info, override=NULL)
 {
+    if(!is.null(override))
+    {
+        return(override)
+    }
     as.Date(thermostat_info$thermostatList[[1]]$thermostatTime)
 }
 
@@ -289,7 +294,8 @@ get_time_offset <- function(thermostat_info)
 
 #' Title
 #'
-#' @param thermostat_info 
+#' @param thermostat_info
+#' @param override
 #'
 #' @return
 #' @export
@@ -297,14 +303,23 @@ get_time_offset <- function(thermostat_info)
 #' @examples
 #' the_info <- get_thermostat_info(access_token)
 #' compute_start_date(the_info)
-compute_start_date <- function(thermostat_info)
+compute_start_date <- function(thermostat_info, override=NULL)
 {
-    get_local_date(thermostat_info) + (get_time_offset(thermostat_info) > 0)
+    if(!is.null(override))
+    {
+        first_part <- override
+    } else
+    {
+        first_part <- get_local_date(thermostat_info)
+    }
+    
+    first_part + (get_time_offset(thermostat_info) > 0)
 }
 
 #' Title
 #'
 #' @param thermostat_info 
+#' @param override
 #'
 #' @return
 #' @export
@@ -312,9 +327,17 @@ compute_start_date <- function(thermostat_info)
 #' @examples
 #' the_info <- get_thermostat_info(access_token)
 #' compute_end_date(the_info)
-compute_end_date <- function(thermostat_info)
+compute_end_date <- function(thermostat_info, override=NULL)
 {
-    get_local_date(thermostat_info) + (get_time_offset(thermostat_info) < 0)
+    if(!is.null(override))
+    {
+        first_part <- override
+    } else
+    {
+        first_part <- get_local_date(thermostat_info)
+    }
+    
+    first_part + (get_time_offset(thermostat_info) < 0)
 }
 
 #' Title
