@@ -390,3 +390,17 @@ write_file <- function(data, file)
     readr::write_csv(x=data, file=file)
     return(file)
 }
+
+#' Title
+#'
+#' @param file 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+delete_file_if_exists <- function(filename)
+{
+    if(file.exists(filename))
+        file.remove('2021-01-16.csv')
+}

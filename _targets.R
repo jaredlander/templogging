@@ -116,6 +116,6 @@ list(
     )
     , tar_target(
         delete_file,
-        if(file.exists(filename)) unlink(filename)
+        delete_file_if_exists(write_data)
     )
 )
