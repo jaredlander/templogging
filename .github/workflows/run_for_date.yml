@@ -29,5 +29,5 @@ jobs:
                 ECOBEE_REFRESH_TOKEN: ${{ secrets.ECOBEE_REFRESH_TOKEN }}
         steps:
             - name: Run targets workflow
-              run: R -e "process_date <- Sys.Date() - 1" -e "targets::tar_make(callr_function=NULL)"
+              run: R -e "Sys.setenv(TZ='${{ secrets.TZ }}')" -e "process_date <- Sys.Date() - 1" -e "targets::tar_make(callr_function=NULL)"
               working-directory: /templogging

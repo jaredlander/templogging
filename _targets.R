@@ -20,9 +20,12 @@ folder_name <- Sys.getenv('FOLDER_NAME')
 
 if(!exists('process_date'))
 {
+    cat('No need to date to run\n')
     process_date <- NULL
+} else{
+    cat(process_date)
 }
-cat(process_date)
+
 
 
 # if we want to hardcode a data, but there has to be a better way
@@ -110,12 +113,14 @@ list(
     )
     , tar_target(
         put_to_bucket,
-        aws.s3::put_object(
-            file=write_data, object=sprintf('%s/%s', folder_name, filename), bucket=bucket_name
-        )
+        write_to_bucket(file=write_data, folder_name=folder_name, filename=filename, bucket_name=bucket_name)
+        # aws.s3::put_object(
+        #     file=write_data, object=sprintf('%s/%s', folder_name, filename), bucket=bucket_name
+        # )
     )
-    , tar_target(
+    , tar_change(
         delete_file,
-        delete_file_if_exists(write_data)
+        delete_file_if_exists(write_data),
+        change=put_to_bucket
     )
 )

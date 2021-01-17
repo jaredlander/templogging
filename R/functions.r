@@ -402,5 +402,32 @@ write_file <- function(data, file)
 delete_file_if_exists <- function(filename)
 {
     if(file.exists(filename))
-        file.remove('2021-01-16.csv')
+        file.remove(filename)
+}
+
+#' Title
+#'
+#' @param file 
+#' @param folder_name 
+#' @param filename 
+#' @param bucket_name 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+write_to_bucket <- function(file, folder_name, filename, bucket_name)
+{
+    op <- aws.s3::put_object(
+        file=file, object=sprintf('%s/%s', folder_name, filename), bucket=bucket_name
+    )
+    
+    # if successfully written
+    if(op)
+    {
+        return(Sys.time())
+    } else
+    {
+        return(FALSE)
+    }
 }
