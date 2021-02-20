@@ -106,10 +106,15 @@ extract_one_sensor_info <- function(sensor)
     sensor$data %>% 
         unlist() %>% 
         readr::read_csv(col_names=sensor_col_names) %>% 
+        # make it longer so we can easy remove rows based on a condition
         tidyr::pivot_longer(cols=c(-date, -time), names_to='Sensor', values_to='Reading') %>% 
+        # we use slice because grep() returns a vector of indices, not TRUE/FALSE
         dplyr::slice(grep(pattern='_(temperature)|(occupancy)$', x=Sensor, ignore.case=FALSE)) %>% 
+        # split apart the sensor name from what it's measuring
         tidyr::separate(col=Sensor, into=c('Sensor', 'Measure'), sep='_', remove=TRUE) %>% 
+        # rename the actual thermostats to say thermostat
         dplyr::mutate(Sensor=sub(pattern='Thermostat .+$', replacement='Thermostat', x=Sensor)) %>% 
+        # back into wide format so each sensor is its own column
         tidyr::pivot_wider(names_from=Measure, values_from=Reading)
 }
 
